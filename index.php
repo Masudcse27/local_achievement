@@ -3,7 +3,10 @@ require('../../config.php');
 require_login();
 
 $context = context_system::instance();
+$canmanage = has_capability('local/achievement:manageachievements', $context);
 
+// var_dump($canmanage);
+// die();
 $PAGE->set_context($context);
 $PAGE->set_url(new moodle_url('/local/achievement/index.php'));
 $PAGE->set_title('Student Achievement');
@@ -16,6 +19,7 @@ $sql = "SELECT a.*, u.firstname, u.lastname
 $achievements = $DB->get_records_sql($sql);
 
 $template_context = [
+    'canmanage' => $canmanage,
     'heading' => 'Achievement List',
     'achievements' => !empty($achievements) ,
     'newurl' => new moodle_url('/local/achievement/edit.php'),

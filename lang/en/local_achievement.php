@@ -12,3 +12,6 @@ $string['nocertificatefound'] = 'No certificate has been uploaded.';
 $string['invalid_id'] = 'Achievement is not found';
 $string['deleted'] = 'Achievement is deleted';
 $string['id_require'] = 'Id is required';
+$string['achievement:view'] = 'View achievements and certificates';
+$string['achievement:manageachievements'] = 'Manage achievements';
+$string['nopermissiontomanage'] = 'You do not have permission to manage achievements.';

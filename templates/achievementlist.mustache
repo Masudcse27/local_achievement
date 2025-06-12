@@ -1,7 +1,7 @@
 <h2>{{heading}}</h2>
-
+{{#canmanage}}
  <a href="{{newurl}}" class="btn btn-primary mb-3">{{create_new}}</a>
-
+{{/canmanage}}
 {{#achievements}}
     <div class="table-responsive">
         <table class="table table-striped table-bordered">
@@ -9,7 +9,7 @@
                 <tr>
                     <th>Student Name</th>
                     <th>Title</th>
-                    <th>Actions</th>
+                    {{#canmanage}} <th>Actions</th> {{/canmanage}}
                 </tr>
             </thead>
             <tbody>
@@ -17,10 +17,12 @@
                     <tr>
                         <td><a href="{{show_url}}" >{{user_name}}</a></td>
                         <td>{{title}}</td>
-                        <td>
-                            <a href="{{editurl}}" class="btn btn-sm btn-secondary">Edit</a>
-                            <a href="{{deleteurl}}" class="btn btn-sm btn-danger">Delete</a>
-                        </td>
+                        {{#canmanage}}
+                            <td>
+                                <a href="{{editurl}}" class="btn btn-sm btn-secondary">Edit</a>
+                                <a href="{{deleteurl}}" class="btn btn-sm btn-danger">Delete</a>
+                            </td>
+                        {{/canmanage}}
                     </tr>
                 {{/list}}
             </tbody>

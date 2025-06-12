@@ -5,6 +5,15 @@ use local_achievement\form\achievement_form;
 require_login();
 
 $context = context_system::instance();
+if (!has_capability('local/achievement:manageachievements', $context)) {
+    // Redirect to index.php with a "no permission" message
+    redirect(
+        new moodle_url('/local/achievement/index.php'),
+        get_string('nopermissiontomanage', 'local_achievement'),
+        null,
+        \core\output\notification::NOTIFY_ERROR
+    );
+}
 $PAGE->set_context($context);
 
 $id = optional_param('id', '0', PARAM_INT);

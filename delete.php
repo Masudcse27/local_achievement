@@ -1,6 +1,17 @@
 <?php
 require('../../config.php');
 require_login();
+$context = context_system::instance();
+
+if (!has_capability('local/achievement:manageachievements', $context)) {
+    // Redirect to index.php with a "no permission" message
+    redirect(
+        new moodle_url('/local/achievement/index.php'),
+        get_string('nopermissiontomanage', 'local_achievement'),
+        null,
+        \core\output\notification::NOTIFY_ERROR
+    );
+}
 
 $id = required_param('id', PARAM_INT);
 if(!$id){
