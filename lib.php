@@ -2,16 +2,14 @@
 defined('MOODLE_INTERNAL') || die();
 
 function local_achievement_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = []) {
-    global $USER;
-
-    if ($context->contextlevel != CONTEXT_SYSTEM || $filearea !== 'certificate') {
+    if ($context->contextlevel != CONTEXT_SYSTEM || $filearea !== 'certificatefiles') {
         return false;
     }
 
     require_login();
 
-    $itemid = array_shift($args);               
-    $filename = array_pop($args);             
+    $itemid = array_shift($args);
+    $filename = array_pop($args);
     $filepath = $args ? '/' . implode('/', $args) . '/' : '/';
 
     $fs = get_file_storage();

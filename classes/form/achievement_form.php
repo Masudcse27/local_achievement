@@ -6,8 +6,10 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/formslib.php');
 
-class achievement_form extends \moodleform{
-    public function definition()  {
+class achievement_form extends \moodleform
+{
+    public function definition()
+    {
         global $DB;
 
         $mform = $this->_form;
@@ -28,9 +30,12 @@ class achievement_form extends \moodleform{
         $mform->addElement('editor', 'description_editor', get_string('description', 'local_achievement'), null);
         $mform->setType('description_editor', PARAM_RAW);
 
-        $mform->addElement('filepicker', 'certificate', get_string('certificate', 'local_achievement'), null, [
-            'accepted_types' => ['.jpg', '.png', '.jpeg', '.pdf']
+        $mform->addElement('filemanager', 'certificate', get_string('certificate', 'local_achievement'), null, [
+            'subdirs' => 0,
+            'maxfiles' => 10,
+            'accepted_types' => ['jpg', 'png', 'jpeg', 'pdf']
         ]);
+
         $mform->addRule('certificate', null, 'required', null, 'client');
 
 

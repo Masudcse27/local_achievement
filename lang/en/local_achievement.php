@@ -15,3 +15,4 @@ $string['id_require'] = 'Id is required';
 $string['achievement:view'] = 'View achievements and certificates';
 $string['achievement:manageachievements'] = 'Manage achievements';
 $string['nopermissiontomanage'] = 'You do not have permission to manage achievements.';
+$string['success'] = 'Update or Create Successful';

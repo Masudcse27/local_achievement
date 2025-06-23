@@ -5,8 +5,8 @@ use local_achievement\form\achievement_form;
 require_login();
 
 $context = context_system::instance();
+
 if (!has_capability('local/achievement:manageachievements', $context)) {
-    // Redirect to index.php with a "no permission" message
     redirect(
         new moodle_url('/local/achievement/index.php'),
         get_string('nopermissiontomanage', 'local_achievement'),
@@ -14,20 +14,21 @@ if (!has_capability('local/achievement:manageachievements', $context)) {
         \core\output\notification::NOTIFY_ERROR
     );
 }
+
 $PAGE->set_context($context);
 
-$id = optional_param('id', '0', PARAM_INT);
+$id = optional_param('id', 0, PARAM_INT);
 $achievement = $id ? $DB->get_record('local_achievement', ['id' => $id], '*', MUST_EXIST) : null;
 
 $PAGE->set_url(new moodle_url('/local/achievement/edit.php', ['id' => $id]));
-
 $PAGE->set_title($id ? get_string('editachievement', 'local_achievement') : get_string('createachievement', 'local_achievement'));
-$PAGE->set_heading($id ? get_string('editachievement', 'local_achievement') : get_string('createachievement', 'local_achievement'));
+$PAGE->set_heading($PAGE->title);
 
 $mform = new achievement_form();
 
 if ($mform->is_cancelled()) {
     redirect(new moodle_url('/local/achievement/index.php'), get_string('cancelled_form', 'local_achievement'));
+
 } else if ($data = $mform->get_data()) {
     $record = (object)[
         'userid' => $data->userid,
@@ -45,32 +46,35 @@ if ($mform->is_cancelled()) {
         $record->id = $DB->insert_record('local_achievement', $record);
     }
 
+    // Save multiple certificate files from draft area
     $draftitemid = $data->certificate;
     file_save_draft_area_files(
         $draftitemid,
         $context->id,
         'local_achievement',
-        'certificate',
+        'certificatefiles', // renamed to support multiple
         $record->id,
-        ['subdirs' => 0, 'maxbytes' => 10485760, 'accepted_types' => ['image']]
+        ['subdirs' => 0, 'maxbytes' => 10485760, 'maxfiles' => 10, 'accepted_types' => ['image', '.pdf']]
     );
 
     redirect(new moodle_url('/local/achievement/index.php'), get_string('success', 'local_achievement'));
 }
+
 if ($achievement) {
     $achievement->description_editor = [
         'text' => $achievement->description,
         'format' => FORMAT_HTML
     ];
 
+    // Prepare multiple files from certificatefiles area
     $draftitemid = file_get_submitted_draft_itemid('certificate');
     file_prepare_draft_area(
         $draftitemid,
         $context->id,
         'local_achievement',
-        'certificate',
+        'certificatefiles',
         $achievement->id,
-        ['subdirs' => 0, 'maxbytes' => 10485760, 'accepted_types' => ['image']]
+        ['subdirs' => 0, 'maxbytes' => 10485760, 'maxfiles' => 10, 'accepted_types' => ['image', '.pdf']]
     );
     $achievement->certificate = $draftitemid;
 
